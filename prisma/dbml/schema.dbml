@@ -1,0 +1,147 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Type_account {
+  TypeAccID Int [pk]
+  TypeAcc String [not null]
+  EmployeeAccounts EmployeeAccount [not null]
+}
+
+Table EmployeeAccount {
+  AccID Int [pk, increment]
+  LoginName String [not null]
+  Password String [not null]
+  TypeAccID Int
+  TypeAccount Type_account
+}
+
+Table Users {
+  UserID Int [pk, increment]
+  UserName String [not null]
+  Email String [unique, not null]
+  Password String [not null]
+  RoleID Int
+  Role Roles
+}
+
+Table ProductCategory {
+  CateID Int [pk, increment]
+  TypeName String [not null]
+  Products Products [not null]
+}
+
+Table Supplier {
+  SuppID Int [pk, increment]
+  SuppName String [not null]
+  Phone String
+  Email String
+  Products Products [not null]
+}
+
+Table Products {
+  ProductID Int [pk, increment]
+  ProductName String [not null]
+  Size String [not null]
+  Quantity Int
+  Old_price Float
+  Sale_price Float [not null]
+  Unit String [not null]
+  Describe String
+  CateID Int
+  SuppID Int
+  Category ProductCategory
+  Supplier Supplier
+  Images ListImage [not null]
+  Details DetailOrder [not null]
+}
+
+Table ListImage {
+  ImageID Int [pk, increment]
+  ProductID Int
+  ImageURL String
+  Product Products
+}
+
+Table Roles {
+  RoleID Int [pk, increment]
+  RoleName String [unique, not null]
+  Users Users [not null]
+}
+
+Table Employee {
+  EmployeeID Int [pk, increment]
+  FullName String [not null]
+  Gender Boolean [not null]
+  BirthDate DateTime
+  Phone String [not null]
+  Email String
+  Orders Orders [not null]
+}
+
+Table Customers {
+  CustomerID Int [pk, increment]
+  FullName String [not null]
+  Gender Boolean [not null]
+  BirthDate DateTime
+  Phone String [not null]
+  Email String
+  Address String
+  Orders Orders [not null]
+}
+
+Table Promotions {
+  PromotionID String [pk]
+  Condition String
+  Value Float
+  StartDate DateTime
+  EndDate DateTime
+  Details DetailOrder [not null]
+}
+
+Table Orders {
+  OrderID Int [pk, increment]
+  SaleDate DateTime [not null]
+  Total Float [not null]
+  Status String
+  EmployeeID Int
+  CustomerID Int
+  Employee Employee
+  Customer Customers
+  Details DetailOrder [not null]
+}
+
+Table DetailOrder {
+  DetailID Int [pk, increment]
+  OrderID Int
+  ProductID Int
+  ProductName String [not null]
+  Quantity Int [not null]
+  Price Float [not null]
+  PromotionID String
+  Discount Float [not null]
+  Total Float [not null]
+  Order Orders
+  Product Products
+  Promotion Promotions
+}
+
+Ref: EmployeeAccount.TypeAccID > Type_account.TypeAccID
+
+Ref: Users.RoleID > Roles.RoleID
+
+Ref: Products.CateID > ProductCategory.CateID
+
+Ref: Products.SuppID > Supplier.SuppID
+
+Ref: ListImage.ProductID > Products.ProductID
+
+Ref: Orders.EmployeeID > Employee.EmployeeID
+
+Ref: Orders.CustomerID > Customers.CustomerID
+
+Ref: DetailOrder.OrderID > Orders.OrderID
+
+Ref: DetailOrder.ProductID > Products.ProductID
+
+Ref: DetailOrder.PromotionID > Promotions.PromotionID

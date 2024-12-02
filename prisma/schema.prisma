@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Type_account {
+  TypeAccID        Int               @id
+  TypeAcc          String
+  EmployeeAccounts EmployeeAccount[]
+
+  @@map("Type_account")
+}
+
+model EmployeeAccount {
+  AccID       Int           @id @default(autoincrement())
+  LoginName   String
+  Password    String
+  TypeAccID   Int?
+  TypeAccount Type_account? @relation(fields: [TypeAccID], references: [TypeAccID])
+
+  @@map("EmployeeAccount")
+}
+
+model Users {
+  UserID   Int    @id @default(autoincrement())
+  UserName String
+  Email    String @unique
+  Password String
+  RoleID   Int?
+  Role     Roles? @relation(fields: [RoleID], references: [RoleID])
+
+  @@map("Users")
+}
+
+model ProductCategory {
+  CateID   Int        @id @default(autoincrement())
+  TypeName String
+  Products Products[]
+
+  @@map("ProductCategory")
+}
+
+model Supplier {
+  SuppID   Int        @id @default(autoincrement())
+  SuppName String
+  Phone    String?
+  Email    String?
+  Products Products[]
+
+  @@map("Supplier")
+}
+
+model Products {
+  ProductID   Int              @id @default(autoincrement())
+  ProductName String
+  Size        String
+  Quantity    Int?
+  Old_price   Float?
+  Sale_price  Float
+  Unit        String
+  Describe    String?
+  CateID      Int?
+  SuppID      Int?
+  Category    ProductCategory? @relation(fields: [CateID], references: [CateID])
+  Supplier    Supplier?        @relation(fields: [SuppID], references: [SuppID])
+  Images      ListImage[]
+  Details     DetailOrder[]
+
+  @@map("Products")
+}
+
+model ListImage {
+  ImageID   Int       @id @default(autoincrement())
+  ProductID Int?
+  ImageURL  String?
+  Product   Products? @relation(fields: [ProductID], references: [ProductID])
+
+  @@map("ListImage")
+}
+
+model Roles {
+  RoleID   Int     @id @default(autoincrement())
+  RoleName String  @unique
+  Users    Users[]
+
+  @@map("Roles")
+}
+
+model Employee {
+  EmployeeID Int       @id @default(autoincrement())
+  FullName   String
+  Gender     Boolean
+  BirthDate  DateTime?
+  Phone      String
+  Email      String?
+  Orders     Orders[]
+
+  @@map("Employee")
+}
+
+model Customers {
+  CustomerID Int       @id @default(autoincrement())
+  FullName   String
+  Gender     Boolean
+  BirthDate  DateTime?
+  Phone      String
+  Email      String?
+  Address    String?
+  Orders     Orders[]
+
+  @@map("Customers")
+}
+
+model Promotions {
+  PromotionID String        @id
+  Condition   String?
+  Value       Float?
+  StartDate   DateTime?
+  EndDate     DateTime?
+  Details     DetailOrder[]
+
+  @@map("Promotions")
+}
+
+model Orders {
+  OrderID    Int           @id @default(autoincrement())
+  SaleDate   DateTime
+  Total      Float
+  Status     String?
+  EmployeeID Int?
+  CustomerID Int?
+  Employee   Employee?     @relation(fields: [EmployeeID], references: [EmployeeID])
+  Customer   Customers?    @relation(fields: [CustomerID], references: [CustomerID])
+  Details    DetailOrder[]
+
+  @@map("Orders")
+}
+
+model DetailOrder {
+  DetailID    Int         @id @default(autoincrement())
+  OrderID     Int?
+  ProductID   Int?
+  ProductName String
+  Quantity    Int
+  Price       Float
+  PromotionID String?
+  Discount    Float
+  Total       Float
+  Order       Orders?     @relation(fields: [OrderID], references: [OrderID])
+  Product     Products?   @relation(fields: [ProductID], references: [ProductID])
+  Promotion   Promotions? @relation(fields: [PromotionID], references: [PromotionID])
+
+  @@map("DetailOrder")
+}
