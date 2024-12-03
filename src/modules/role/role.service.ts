@@ -45,6 +45,6 @@ export class RoleService {
   }
 
   async deleteRole(id: string) {
-    return this.prisma.roles.delete({ where: { RoleID: Number(id) } });
+    return this.prisma.roles.delete({ where: { RoleID: id } });
   }
 }

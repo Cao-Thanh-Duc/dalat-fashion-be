@@ -2,37 +2,23 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
-Table Type_account {
-  TypeAccID Int [pk]
-  TypeAcc String [not null]
-  EmployeeAccounts EmployeeAccount [not null]
-}
-
-Table EmployeeAccount {
-  AccID Int [pk, increment]
-  LoginName String [not null]
-  Password String [not null]
-  TypeAccID Int
-  TypeAccount Type_account
-}
-
 Table Users {
-  UserID Int [pk, increment]
+  UserID String [pk]
   UserName String [not null]
   Email String [unique, not null]
   Password String [not null]
-  RoleID Int
+  RoleID String
   Role Roles
 }
 
 Table ProductCategory {
-  CateID Int [pk, increment]
+  CateID String [pk]
   TypeName String [not null]
   Products Products [not null]
 }
 
 Table Supplier {
-  SuppID Int [pk, increment]
+  SuppID String [pk]
   SuppName String [not null]
   Phone String
   Email String
@@ -40,7 +26,7 @@ Table Supplier {
 }
 
 Table Products {
-  ProductID Int [pk, increment]
+  ProductID String [pk]
   ProductName String [not null]
   Size String [not null]
   Quantity Int
@@ -48,8 +34,8 @@ Table Products {
   Sale_price Float [not null]
   Unit String [not null]
   Describe String
-  CateID Int
-  SuppID Int
+  CateID String
+  SuppID String
   Category ProductCategory
   Supplier Supplier
   Images ListImage [not null]
@@ -57,20 +43,20 @@ Table Products {
 }
 
 Table ListImage {
-  ImageID Int [pk, increment]
-  ProductID Int
+  ImageID String [pk]
+  ProductID String
   ImageURL String
   Product Products
 }
 
 Table Roles {
-  RoleID Int [pk, increment]
+  RoleID String [pk]
   RoleName String [unique, not null]
   Users Users [not null]
 }
 
 Table Employee {
-  EmployeeID Int [pk, increment]
+  EmployeeID String [pk]
   FullName String [not null]
   Gender Boolean [not null]
   BirthDate DateTime
@@ -80,7 +66,7 @@ Table Employee {
 }
 
 Table Customers {
-  CustomerID Int [pk, increment]
+  CustomerID String [pk]
   FullName String [not null]
   Gender Boolean [not null]
   BirthDate DateTime
@@ -100,21 +86,21 @@ Table Promotions {
 }
 
 Table Orders {
-  OrderID Int [pk, increment]
+  OrderID String [pk]
   SaleDate DateTime [not null]
   Total Float [not null]
   Status String
-  EmployeeID Int
-  CustomerID Int
+  EmployeeID String
+  CustomerID String
   Employee Employee
   Customer Customers
   Details DetailOrder [not null]
 }
 
 Table DetailOrder {
-  DetailID Int [pk, increment]
-  OrderID Int
-  ProductID Int
+  DetailID String [pk]
+  OrderID String
+  ProductID String
   ProductName String [not null]
   Quantity Int [not null]
   Price Float [not null]
@@ -125,8 +111,6 @@ Table DetailOrder {
   Product Products
   Promotion Promotions
 }
-
-Ref: EmployeeAccount.TypeAccID > Type_account.TypeAccID
 
 Ref: Users.RoleID > Roles.RoleID
 

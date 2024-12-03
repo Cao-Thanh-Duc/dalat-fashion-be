@@ -11,37 +11,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Type_account {
-  TypeAccID        Int               @id
-  TypeAcc          String
-  EmployeeAccounts EmployeeAccount[]
-
-  @@map("Type_account")
-}
-
-model EmployeeAccount {
-  AccID       Int           @id @default(autoincrement())
-  LoginName   String
-  Password    String
-  TypeAccID   Int?
-  TypeAccount Type_account? @relation(fields: [TypeAccID], references: [TypeAccID])
-
-  @@map("EmployeeAccount")
-}
-
+// bỏ type_account và employee
 model Users {
-  UserID   Int    @id @default(autoincrement())
+  UserID   String  @id @default(cuid())
   UserName String
-  Email    String @unique
+  Email    String  @unique
   Password String
-  RoleID   Int?
-  Role     Roles? @relation(fields: [RoleID], references: [RoleID])
+  RoleID   String?
+  Role     Roles?  @relation(fields: [RoleID], references: [RoleID])
 
   @@map("Users")
 }
 
 model ProductCategory {
-  CateID   Int        @id @default(autoincrement())
+  CateID   String     @id @default(cuid())
   TypeName String
   Products Products[]
 
@@ -49,7 +32,7 @@ model ProductCategory {
 }
 
 model Supplier {
-  SuppID   Int        @id @default(autoincrement())
+  SuppID   String     @id @default(cuid())
   SuppName String
   Phone    String?
   Email    String?
@@ -59,7 +42,7 @@ model Supplier {
 }
 
 model Products {
-  ProductID   Int              @id @default(autoincrement())
+  ProductID   String           @id @default(cuid())
   ProductName String
   Size        String
   Quantity    Int?
@@ -67,8 +50,8 @@ model Products {
   Sale_price  Float
   Unit        String
   Describe    String?
-  CateID      Int?
-  SuppID      Int?
+  CateID      String?
+  SuppID      String?
   Category    ProductCategory? @relation(fields: [CateID], references: [CateID])
   Supplier    Supplier?        @relation(fields: [SuppID], references: [SuppID])
   Images      ListImage[]
@@ -78,8 +61,8 @@ model Products {
 }
 
 model ListImage {
-  ImageID   Int       @id @default(autoincrement())
-  ProductID Int?
+  ImageID   String    @id @default(cuid())
+  ProductID String?
   ImageURL  String?
   Product   Products? @relation(fields: [ProductID], references: [ProductID])
 
@@ -87,7 +70,7 @@ model ListImage {
 }
 
 model Roles {
-  RoleID   Int     @id @default(autoincrement())
+  RoleID   String  @id @default(cuid())
   RoleName String  @unique
   Users    Users[]
 
@@ -95,7 +78,7 @@ model Roles {
 }
 
 model Employee {
-  EmployeeID Int       @id @default(autoincrement())
+  EmployeeID String    @id @default(cuid())
   FullName   String
   Gender     Boolean
   BirthDate  DateTime?
@@ -107,7 +90,7 @@ model Employee {
 }
 
 model Customers {
-  CustomerID Int       @id @default(autoincrement())
+  CustomerID String    @id @default(cuid())
   FullName   String
   Gender     Boolean
   BirthDate  DateTime?
@@ -120,7 +103,7 @@ model Customers {
 }
 
 model Promotions {
-  PromotionID String        @id
+  PromotionID String        @id @default(cuid())
   Condition   String?
   Value       Float?
   StartDate   DateTime?
@@ -131,12 +114,12 @@ model Promotions {
 }
 
 model Orders {
-  OrderID    Int           @id @default(autoincrement())
+  OrderID    String        @id @default(cuid())
   SaleDate   DateTime
   Total      Float
   Status     String?
-  EmployeeID Int?
-  CustomerID Int?
+  EmployeeID String?
+  CustomerID String?
   Employee   Employee?     @relation(fields: [EmployeeID], references: [EmployeeID])
   Customer   Customers?    @relation(fields: [CustomerID], references: [CustomerID])
   Details    DetailOrder[]
@@ -145,9 +128,9 @@ model Orders {
 }
 
 model DetailOrder {
-  DetailID    Int         @id @default(autoincrement())
-  OrderID     Int?
-  ProductID   Int?
+  DetailID    String      @id @default(cuid())
+  OrderID     String?
+  ProductID   String?
   ProductName String
   Quantity    Int
   Price       Float

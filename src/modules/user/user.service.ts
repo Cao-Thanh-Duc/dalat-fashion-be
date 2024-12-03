@@ -18,8 +18,8 @@ export class UserService {
   ) {}
 
   async getAll(filters: UserFilterType): Promise<any> {
-    const items_per_page = Number(filters.items_per_page) || 10;
-    const page = Number(filters.page) || 1;
+    const items_per_page = filters.items_per_page || 10;
+    const page = filters.page || 1;
     const search = filters.search || '';
     const skip = page > 1 ? (page - 1) * items_per_page : 0;
 
@@ -55,7 +55,7 @@ export class UserService {
 
   async getDetail(id: string): Promise<any> {
     const user = await this.prismaService.users.findUnique({
-      where: { UserID: Number(id) },
+      where: { UserID: id },
       select: {
         UserID: true,
         Email: true,
@@ -73,7 +73,7 @@ export class UserService {
   async updateMeUser(data: UpdateUserDto, id: string): Promise<Users> {
     return await this.prismaService.users.update({
       where: {
-        UserID: Number(id),
+        UserID: id,
       },
       data: {
         Email: data.Email,
@@ -93,7 +93,7 @@ export class UserService {
     }
 
     const role = await this.prismaService.roles.findUnique({
-      where: { RoleID: Number(roleId) },
+      where: { RoleID: roleId },
     });
 
     if (!role) {
@@ -104,8 +104,8 @@ export class UserService {
     }
 
     return await this.prismaService.users.update({
-      where: { UserID: Number(userId) },
-      data: { RoleID: Number(roleId) },
+      where: { UserID: userId },
+      data: { RoleID: roleId },
     });
   }
 
@@ -118,7 +118,7 @@ export class UserService {
     }
 
     const user = await this.prismaService.users.findUnique({
-      where: { UserID: Number(userId) },
+      where: { UserID: userId },
     });
 
     if (!user) {
@@ -126,7 +126,7 @@ export class UserService {
     }
 
     await this.prismaService.users.delete({
-      where: { UserID: Number(userId) },
+      where: { UserID: userId },
     });
 
     return { message: 'User deleted successfully' };
