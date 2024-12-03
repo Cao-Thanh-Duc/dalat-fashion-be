@@ -46,15 +46,6 @@ REFRESH_TOKEN_KEY=
 MAIL_TRANSPORT=
 MAIL_FROM=
 JWT_SECRET=
-AWS_REGION=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_S3_BUCKET_NAME=
-MOMO_YOUR_SECRET_KEY=
-MOMO_PARTNER_CODE=
-MOMO_ACCESS_KEY=
-MOMO_REDIRECT_URL=
-MOMO_IPN_URL=
 ```
 
 ## Running the app
@@ -81,7 +72,3 @@ $ npm run test:cov
 ```
 
 Open http://localhost:3001/api with your favorite browser to swagger.
-
----
-
-Made with ♥ by [ThanhDev](https://www.facebook.com/thanh.vophuoc.50)
