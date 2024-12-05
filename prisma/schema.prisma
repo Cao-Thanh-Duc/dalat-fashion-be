@@ -13,26 +13,29 @@ datasource db {
 
 // bỏ type_account và employee
 model Users {
-  UserID   String  @id @default(cuid())
-  UserName String
-  Email    String  @unique
-  Password String
-  RoleID   String?
-  Role     Roles?  @relation(fields: [RoleID], references: [RoleID])
+  UserID       String        @id @default(cuid())
+  UserName     String
+  Email        String        @unique
+  Password     String
+  RoleID       String?
+  Role         Roles?        @relation(fields: [RoleID], references: [RoleID])
+  UserProducts UserProduct[]
 
   @@map("Users")
 }
 
+// Danh mục sản phẩm
 model ProductCategory {
-  CateID   String     @id @default(cuid())
-  TypeName String
+  id       String     @id @default(cuid())
+  name     String
   Products Products[]
 
   @@map("ProductCategory")
 }
 
+// Nhà cung cấp
 model Supplier {
-  SuppID   String     @id @default(cuid())
+  id       String     @id @default(cuid())
   SuppName String
   Phone    String?
   Email    String?
@@ -41,25 +44,28 @@ model Supplier {
   @@map("Supplier")
 }
 
+// Sản phẩm
 model Products {
-  ProductID   String           @id @default(cuid())
-  ProductName String
-  Size        String
-  Quantity    Int?
-  Old_price   Float?
-  Sale_price  Float
-  Unit        String
-  Describe    String?
-  CateID      String?
-  SuppID      String?
-  Category    ProductCategory? @relation(fields: [CateID], references: [CateID])
-  Supplier    Supplier?        @relation(fields: [SuppID], references: [SuppID])
-  Images      ListImage[]
-  Details     DetailOrder[]
+  ProductID    String           @id @default(cuid())
+  ProductName  String
+  Size         String
+  Quantity     Int?
+  Old_price    Float?
+  Sale_price   Float
+  Unit         String
+  Describe     String?
+  CateID       String?
+  SuppID       String?
+  Category     ProductCategory? @relation(fields: [CateID], references: [id])
+  Supplier     Supplier?        @relation(fields: [SuppID], references: [id])
+  Images       ListImage[]
+  Details      DetailOrder[]
+  UserProducts UserProduct[]
 
   @@map("Products")
 }
 
+// bỏ
 model ListImage {
   ImageID   String    @id @default(cuid())
   ProductID String?
@@ -69,6 +75,7 @@ model ListImage {
   @@map("ListImage")
 }
 
+// Role user trong hệ thống
 model Roles {
   RoleID   String  @id @default(cuid())
   RoleName String  @unique
@@ -77,6 +84,7 @@ model Roles {
   @@map("Roles")
 }
 
+// bỏ
 model Employee {
   EmployeeID String    @id @default(cuid())
   FullName   String
@@ -88,6 +96,8 @@ model Employee {
 
   @@map("Employee")
 }
+
+// Bỏ
 
 model Customers {
   CustomerID String    @id @default(cuid())
@@ -102,6 +112,8 @@ model Customers {
   @@map("Customers")
 }
 
+// Khuyến mãi
+
 model Promotions {
   PromotionID String        @id @default(cuid())
   Condition   String?
@@ -113,6 +125,7 @@ model Promotions {
   @@map("Promotions")
 }
 
+// Hóa đơn
 model Orders {
   OrderID    String        @id @default(cuid())
   SaleDate   DateTime
@@ -127,6 +140,7 @@ model Orders {
   @@map("Orders")
 }
 
+// Chi tiết hóa đơn
 model DetailOrder {
   DetailID    String      @id @default(cuid())
   OrderID     String?
@@ -142,4 +156,18 @@ model DetailOrder {
   Promotion   Promotions? @relation(fields: [PromotionID], references: [PromotionID])
 
   @@map("DetailOrder")
+}
+
+// bảng nhiều nhiều
+
+// Mối quan hệ nhiều nhiều giữa User và Product
+model UserProduct {
+  id        String   @id @default(cuid())
+  UserID    String
+  ProductID String
+  User      Users    @relation(fields: [UserID], references: [UserID])
+  Product   Products @relation(fields: [ProductID], references: [ProductID])
+
+  @@unique([UserID, ProductID])
+  @@map("UserProduct")
 }

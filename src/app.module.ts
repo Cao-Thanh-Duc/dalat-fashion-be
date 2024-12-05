@@ -6,7 +6,10 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoryProductModule } from './modules/category-product/category-product.module';
+import { ProductModule } from './modules/product/product.module';
 import { RoleModule } from './modules/role/role.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -21,6 +24,9 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     UserModule,
     RoleModule,
+    CategoryProductModule,
+    ProductModule,
+    SupplierModule,
   ],
   controllers: [AppController],
   providers: [

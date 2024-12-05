@@ -15,6 +15,9 @@ async function bootstrap() {
     .setDescription('The Dalat Fashion API description')
     .setVersion('1.0')
     .addTag('auth')
+    .addTag('category-product')
+    .addTag('product')
+    .addTag('supplier')
     .addTag('user')
     .addBearerAuth()
     .build();

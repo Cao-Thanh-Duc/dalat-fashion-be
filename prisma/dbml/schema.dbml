@@ -9,16 +9,17 @@ Table Users {
   Password String [not null]
   RoleID String
   Role Roles
+  UserProducts UserProduct [not null]
 }
 
 Table ProductCategory {
-  CateID String [pk]
-  TypeName String [not null]
+  id String [pk]
+  name String [not null]
   Products Products [not null]
 }
 
 Table Supplier {
-  SuppID String [pk]
+  id String [pk]
   SuppName String [not null]
   Phone String
   Email String
@@ -40,6 +41,7 @@ Table Products {
   Supplier Supplier
   Images ListImage [not null]
   Details DetailOrder [not null]
+  UserProducts UserProduct [not null]
 }
 
 Table ListImage {
@@ -112,11 +114,23 @@ Table DetailOrder {
   Promotion Promotions
 }
 
+Table UserProduct {
+  id String [pk]
+  UserID String [not null]
+  ProductID String [not null]
+  User Users [not null]
+  Product Products [not null]
+
+  indexes {
+    (UserID, ProductID) [unique]
+  }
+}
+
 Ref: Users.RoleID > Roles.RoleID
 
-Ref: Products.CateID > ProductCategory.CateID
+Ref: Products.CateID > ProductCategory.id
 
-Ref: Products.SuppID > Supplier.SuppID
+Ref: Products.SuppID > Supplier.id
 
 Ref: ListImage.ProductID > Products.ProductID
 
@@ -129,3 +143,7 @@ Ref: DetailOrder.OrderID > Orders.OrderID
 Ref: DetailOrder.ProductID > Products.ProductID
 
 Ref: DetailOrder.PromotionID > Promotions.PromotionID
+
+Ref: UserProduct.UserID > Users.UserID
+
+Ref: UserProduct.ProductID > Products.ProductID
