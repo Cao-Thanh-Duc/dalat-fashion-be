@@ -26,8 +26,8 @@ export class UserService {
     const where: Prisma.UsersWhereInput = search
       ? {
           OR: [
-            { UserName: { contains: search, mode: 'insensitive' } },
-            { Email: { contains: search, mode: 'insensitive' } },
+            { fullname: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search, mode: 'insensitive' } },
           ],
         }
       : {};
@@ -38,8 +38,8 @@ export class UserService {
       take: items_per_page,
       select: {
         UserID: true,
-        Email: true,
-        UserName: true,
+        email: true,
+        fullname: true,
       },
     });
 
@@ -58,8 +58,8 @@ export class UserService {
       where: { UserID: id },
       select: {
         UserID: true,
-        Email: true,
-        UserName: true,
+        email: true,
+        fullname: true,
       },
     });
 
@@ -76,9 +76,12 @@ export class UserService {
         UserID: id,
       },
       data: {
-        Email: data.Email,
-        UserName: data.UserName,
-        // map other fields as necessary
+        email: data.email,
+        fullname: data.fullname,
+        phone: data.phone,
+        address: data.address,
+        birth_date: data.birth_date,
+        gender: data.gender,
       },
     });
   }

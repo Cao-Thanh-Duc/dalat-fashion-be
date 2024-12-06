@@ -7,6 +7,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { UserGender } from 'src/enums/user.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -29,11 +30,28 @@ export class CreateUserDto {
 export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
-  UserName?: string;
+  fullname?: string;
 
   @ApiProperty()
   @IsOptional()
-  Email?: string;
+  email?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @Matches(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)
+  phone?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  address?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  gender?: UserGender;
+
+  @ApiProperty()
+  @IsOptional()
+  birth_date?: string;
 }
 
 export interface UserFilterType {

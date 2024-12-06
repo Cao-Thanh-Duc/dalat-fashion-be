@@ -30,7 +30,7 @@ export class AuthService {
 
   async register(userData: RegisterDto): Promise<any> {
     const existingUser = await this.prismaService.users.findUnique({
-      where: { Email: userData.Email },
+      where: { email: userData.email },
     });
 
     if (existingUser) {
@@ -39,7 +39,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const hashedPassword = await hash(userData.Password, 10);
+    const hashedPassword = await hash(userData.password, 10);
     const defaultRole = await this.prismaService.roles.findUnique({
       where: { RoleName: 'USER' },
     });
@@ -53,9 +53,9 @@ export class AuthService {
 
     await this.prismaService.users.create({
       data: {
-        Email: userData.Email,
-        Password: hashedPassword,
-        UserName: userData.UserName,
+        email: userData.email,
+        password: hashedPassword,
+        fullname: userData.fullname,
         Role: {
           connect: { RoleID: defaultRole.RoleID },
         },
@@ -65,10 +65,10 @@ export class AuthService {
     return { message: 'Đăng ký thành công' };
   }
 
-  login = async (data: { Email: string; Password: string }): Promise<any> => {
+  login = async (data: { email: string; password: string }): Promise<any> => {
     const user = await this.prismaService.users.findUnique({
       where: {
-        Email: data.Email,
+        email: data.email,
       },
       include: {
         Role: true,
@@ -82,7 +82,7 @@ export class AuthService {
       );
     }
 
-    const verify = await compare(data.Password, user.Password);
+    const verify = await compare(data.password, user.password);
     if (!verify) {
       throw new HttpException(
         { message: 'Password is not correct' },
@@ -99,8 +99,8 @@ export class AuthService {
 
     const payload = {
       id: user.UserID,
-      name: user.UserName,
-      email: user.Email,
+      name: user.fullname,
+      email: user.email,
       role: user.Role.RoleName,
     };
     const access_token = await this.jwtService.signAsync(payload, {
@@ -118,8 +118,8 @@ export class AuthService {
       refresh_token,
       user: {
         id: user.UserID,
-        name: user.UserName,
-        email: user.Email,
+        name: user.fullname,
+        email: user.email,
         role: user.Role.RoleName,
       },
     };
@@ -141,16 +141,16 @@ export class AuthService {
     );
   };
 
-  forgotPassword = async (data: { Email: string }) => {
+  forgotPassword = async (data: { email: string }) => {
     const user = await this.prismaService.users.findUnique({
       where: {
-        Email: data.Email,
+        email: data.email,
       },
     });
 
     if (!user) {
       throw new HttpException(
-        { message: `Email ${data.Email} not found` },
+        { message: `Email ${data.email} not found` },
         HttpStatus.UNAUTHORIZED,
       );
     }
@@ -231,7 +231,7 @@ export class AuthService {
 `;
 
     await mailService.sendMail({
-      to: data.Email,
+      to: data.email,
       html: templateEmailResetPassword,
       subject: 'Reset  password',
     });
@@ -245,17 +245,17 @@ export class AuthService {
     const user = await this.prismaService.users.findUnique({
       where: { UserID: data.UserID },
       select: {
-        Password: true,
+        password: true,
       },
     });
 
-    if (!user || !user.Password) {
+    if (!user || !user.password) {
       throw new HttpException(
         { message: 'User password is missing' },
         HttpStatus.BAD_REQUEST,
       );
     }
-    const isSamePassword = await compare(newPassword, user.Password);
+    const isSamePassword = await compare(newPassword, user.password);
     if (isSamePassword) {
       throw new HttpException(
         { message: 'New password cannot be the same as the old password' },
@@ -270,7 +270,7 @@ export class AuthService {
         UserID: data.UserID,
       },
       data: {
-        Password: hashPassword,
+        password: hashPassword,
       },
     });
 
@@ -295,11 +295,11 @@ export class AuthService {
     const userRecord = await this.prismaService.users.findUnique({
       where: { UserID: user.UserID },
       select: {
-        Password: true,
+        password: true,
       },
     });
 
-    if (!userRecord || !userRecord.Password) {
+    if (!userRecord || !userRecord.password) {
       throw new HttpException(
         { message: 'User password is missing' },
         HttpStatus.BAD_REQUEST,
@@ -308,7 +308,7 @@ export class AuthService {
 
     const isCurrentPasswordCorrect = await compare(
       current_password,
-      userRecord.Password,
+      userRecord.password,
     );
     if (!isCurrentPasswordCorrect) {
       throw new HttpException(
@@ -337,7 +337,7 @@ export class AuthService {
         UserID: user.UserID,
       },
       data: {
-        Password: hashedPassword,
+        password: hashedPassword,
       },
     });
 

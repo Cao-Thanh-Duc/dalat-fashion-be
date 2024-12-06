@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class ForgotPasswordDto {
   @IsEmail()
-  Email: string;
+  email: string;
 }
 
 export class ResetPasswordDto {
@@ -27,7 +27,7 @@ export class ChangePasswordDto {
   @ApiProperty()
   @IsNotEmpty()
   @MinLength(6)
-  Password: string;
+  password: string;
 
   @ApiProperty()
   @IsNotEmpty()

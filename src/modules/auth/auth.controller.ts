@@ -82,11 +82,11 @@ export class AuthController {
     @CurrentUser() user: Users,
     @Body() body: ChangePasswordDto,
   ): Promise<any> {
-    const { current_password, Password, confirm_password } = body;
+    const { current_password, password, confirm_password } = body;
     return this.authService.changePassword(
       user,
       current_password,
-      Password,
+      password,
       confirm_password,
     );
   }

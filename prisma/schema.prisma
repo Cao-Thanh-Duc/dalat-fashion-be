@@ -11,17 +11,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// bỏ type_account và employee
 model Users {
   UserID       String        @id @default(cuid())
-  UserName     String
-  Email        String        @unique
-  Password     String
+  fullname     String
+  gender       Gender?
+  birth_date   DateTime?
+  phone        String?
+  address      String?
+  email        String        @unique
+  password     String
   RoleID       String?
   Role         Roles?        @relation(fields: [RoleID], references: [RoleID])
   UserProducts UserProduct[]
 
   @@map("Users")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
 
 // Danh mục sản phẩm
@@ -33,10 +42,10 @@ model ProductCategory {
   @@map("ProductCategory")
 }
 
-// Nhà cung cấp
+// Nhà cung cấp (hãng sản xuất ra)
 model Supplier {
   id       String     @id @default(cuid())
-  SuppName String
+  name     String
   Phone    String?
   Email    String?
   Products Products[]
@@ -46,33 +55,36 @@ model Supplier {
 
 // Sản phẩm
 model Products {
-  ProductID    String           @id @default(cuid())
-  ProductName  String
-  Size         String
-  Quantity     Int?
-  Old_price    Float?
-  Sale_price   Float
-  Unit         String
-  Describe     String?
+  id           String           @id @default(cuid())
+  name         String
+  size         SizeEnum?
+  quantity     Int?
+  price        Float?
+  sale_price   Float
+  unit         String
+  description  String?
   CateID       String?
   SuppID       String?
   Category     ProductCategory? @relation(fields: [CateID], references: [id])
   Supplier     Supplier?        @relation(fields: [SuppID], references: [id])
-  Images       ListImage[]
   Details      DetailOrder[]
+  image        String?
+  image_2      String?
+  image_3      String?
+  image_4      String?
+  image_5      String?
   UserProducts UserProduct[]
+  Orders       Orders[]
 
   @@map("Products")
 }
 
-// bỏ
-model ListImage {
-  ImageID   String    @id @default(cuid())
-  ProductID String?
-  ImageURL  String?
-  Product   Products? @relation(fields: [ProductID], references: [ProductID])
-
-  @@map("ListImage")
+enum SizeEnum {
+  S
+  XS
+  M
+  L
+  XL
 }
 
 // Role user trong hệ thống
@@ -92,7 +104,6 @@ model Employee {
   BirthDate  DateTime?
   Phone      String
   Email      String?
-  Orders     Orders[]
 
   @@map("Employee")
 }
@@ -107,7 +118,6 @@ model Customers {
   Phone      String
   Email      String?
   Address    String?
-  Orders     Orders[]
 
   @@map("Customers")
 }
@@ -127,33 +137,39 @@ model Promotions {
 
 // Hóa đơn
 model Orders {
-  OrderID    String        @id @default(cuid())
-  SaleDate   DateTime
-  Total      Float
-  Status     String?
-  EmployeeID String?
-  CustomerID String?
-  Employee   Employee?     @relation(fields: [EmployeeID], references: [EmployeeID])
-  Customer   Customers?    @relation(fields: [CustomerID], references: [CustomerID])
-  Details    DetailOrder[]
+  OrderID   String        @id @default(cuid())
+  buy_date  DateTime
+  total     Float
+  status    OrderStatus
+  ProductID String?
+  product   Products?     @relation(fields: [ProductID], references: [id])
+  price     Float
+  Details   DetailOrder[]
 
   @@map("Orders")
 }
 
+enum OrderStatus {
+  Pending
+  Processing
+  Completed
+  Cancelled
+}
+
 // Chi tiết hóa đơn
 model DetailOrder {
-  DetailID    String      @id @default(cuid())
-  OrderID     String?
-  ProductID   String?
-  ProductName String
-  Quantity    Int
-  Price       Float
-  PromotionID String?
-  Discount    Float
-  Total       Float
-  Order       Orders?     @relation(fields: [OrderID], references: [OrderID])
-  Product     Products?   @relation(fields: [ProductID], references: [ProductID])
-  Promotion   Promotions? @relation(fields: [PromotionID], references: [PromotionID])
+  DetailID     String      @id @default(cuid())
+  OrderID      String?
+  ProductID    String?
+  product_name String
+  quantity     Int
+  price        Float
+  PromotionID  String?
+  Discount     Float
+  total        Float
+  Order        Orders?     @relation(fields: [OrderID], references: [OrderID])
+  Product      Products?   @relation(fields: [ProductID], references: [id])
+  Promotion    Promotions? @relation(fields: [PromotionID], references: [PromotionID])
 
   @@map("DetailOrder")
 }
@@ -166,7 +182,7 @@ model UserProduct {
   UserID    String
   ProductID String
   User      Users    @relation(fields: [UserID], references: [UserID])
-  Product   Products @relation(fields: [ProductID], references: [ProductID])
+  Product   Products @relation(fields: [ProductID], references: [id])
 
   @@unique([UserID, ProductID])
   @@map("UserProduct")

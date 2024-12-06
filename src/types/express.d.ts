@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Users } from '@prisma/client';
 
 declare global {
   namespace Express {
@@ -10,6 +10,6 @@ declare global {
 
 declare module 'express' {
   export interface Request {
-    user?: User;
+    user?: Users;
   }
 }

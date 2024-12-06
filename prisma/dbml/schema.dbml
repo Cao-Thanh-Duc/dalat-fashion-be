@@ -4,9 +4,13 @@
 
 Table Users {
   UserID String [pk]
-  UserName String [not null]
-  Email String [unique, not null]
-  Password String [not null]
+  fullname String [not null]
+  gender Gender
+  birth_date DateTime
+  phone String
+  address String
+  email String [unique, not null]
+  password String [not null]
   RoleID String
   Role Roles
   UserProducts UserProduct [not null]
@@ -20,35 +24,33 @@ Table ProductCategory {
 
 Table Supplier {
   id String [pk]
-  SuppName String [not null]
+  name String [not null]
   Phone String
   Email String
   Products Products [not null]
 }
 
 Table Products {
-  ProductID String [pk]
-  ProductName String [not null]
-  Size String [not null]
-  Quantity Int
-  Old_price Float
-  Sale_price Float [not null]
-  Unit String [not null]
-  Describe String
+  id String [pk]
+  name String [not null]
+  size SizeEnum
+  quantity Int
+  price Float
+  sale_price Float [not null]
+  unit String [not null]
+  description String
   CateID String
   SuppID String
   Category ProductCategory
   Supplier Supplier
-  Images ListImage [not null]
   Details DetailOrder [not null]
+  image String
+  image_2 String
+  image_3 String
+  image_4 String
+  image_5 String
   UserProducts UserProduct [not null]
-}
-
-Table ListImage {
-  ImageID String [pk]
-  ProductID String
-  ImageURL String
-  Product Products
+  Orders Orders [not null]
 }
 
 Table Roles {
@@ -64,7 +66,6 @@ Table Employee {
   BirthDate DateTime
   Phone String [not null]
   Email String
-  Orders Orders [not null]
 }
 
 Table Customers {
@@ -75,7 +76,6 @@ Table Customers {
   Phone String [not null]
   Email String
   Address String
-  Orders Orders [not null]
 }
 
 Table Promotions {
@@ -89,13 +89,12 @@ Table Promotions {
 
 Table Orders {
   OrderID String [pk]
-  SaleDate DateTime [not null]
-  Total Float [not null]
-  Status String
-  EmployeeID String
-  CustomerID String
-  Employee Employee
-  Customer Customers
+  buy_date DateTime [not null]
+  total Float [not null]
+  status OrderStatus [not null]
+  ProductID String
+  product Products
+  price Float [not null]
   Details DetailOrder [not null]
 }
 
@@ -103,12 +102,12 @@ Table DetailOrder {
   DetailID String [pk]
   OrderID String
   ProductID String
-  ProductName String [not null]
-  Quantity Int [not null]
-  Price Float [not null]
+  product_name String [not null]
+  quantity Int [not null]
+  price Float [not null]
   PromotionID String
   Discount Float [not null]
-  Total Float [not null]
+  total Float [not null]
   Order Orders
   Product Products
   Promotion Promotions
@@ -126,24 +125,41 @@ Table UserProduct {
   }
 }
 
+Enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+Enum SizeEnum {
+  S
+  XS
+  M
+  L
+  XL
+}
+
+Enum OrderStatus {
+  Pending
+  Processing
+  Completed
+  Cancelled
+}
+
 Ref: Users.RoleID > Roles.RoleID
 
 Ref: Products.CateID > ProductCategory.id
 
 Ref: Products.SuppID > Supplier.id
 
-Ref: ListImage.ProductID > Products.ProductID
-
-Ref: Orders.EmployeeID > Employee.EmployeeID
-
-Ref: Orders.CustomerID > Customers.CustomerID
+Ref: Orders.ProductID > Products.id
 
 Ref: DetailOrder.OrderID > Orders.OrderID
 
-Ref: DetailOrder.ProductID > Products.ProductID
+Ref: DetailOrder.ProductID > Products.id
 
 Ref: DetailOrder.PromotionID > Promotions.PromotionID
 
 Ref: UserProduct.UserID > Users.UserID
 
-Ref: UserProduct.ProductID > Products.ProductID
+Ref: UserProduct.ProductID > Products.id
