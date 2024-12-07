@@ -64,25 +64,6 @@ Table Roles {
   Users Users [not null]
 }
 
-Table Employee {
-  EmployeeID String [pk]
-  FullName String [not null]
-  Gender Boolean [not null]
-  BirthDate DateTime
-  Phone String [not null]
-  Email String
-}
-
-Table Customers {
-  CustomerID String [pk]
-  FullName String [not null]
-  Gender Boolean [not null]
-  BirthDate DateTime
-  Phone String [not null]
-  Email String
-  Address String
-}
-
 Table Promotions {
   PromotionID String [pk]
   Condition String

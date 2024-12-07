@@ -103,32 +103,6 @@ model Roles {
   @@map("Roles")
 }
 
-// bỏ
-model Employee {
-  EmployeeID String    @id @default(cuid())
-  FullName   String
-  Gender     Boolean
-  BirthDate  DateTime?
-  Phone      String
-  Email      String?
-
-  @@map("Employee")
-}
-
-// Bỏ
-
-model Customers {
-  CustomerID String    @id @default(cuid())
-  FullName   String
-  Gender     Boolean
-  BirthDate  DateTime?
-  Phone      String
-  Email      String?
-  Address    String?
-
-  @@map("Customers")
-}
-
 // Khuyến mãi
 
 model Promotions {
