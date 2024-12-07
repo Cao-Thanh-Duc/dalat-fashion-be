@@ -46,8 +46,6 @@ model ProductCategory {
 model Supplier {
   id       String     @id @default(cuid())
   name     String
-  Phone    String?
-  Email    String?
   Products Products[]
 
   @@map("Supplier")
@@ -57,7 +55,6 @@ model Supplier {
 model Products {
   id           String           @id @default(cuid())
   name         String
-  size         SizeEnum?
   quantity     Int?
   price        Float?
   sale_price   Float
@@ -75,8 +72,18 @@ model Products {
   image_5      String?
   UserProducts UserProduct[]
   Orders       Orders[]
+  size         ProductSize[]
 
   @@map("Products")
+}
+
+model ProductSize {
+  id        String   @id @default(cuid())
+  size      SizeEnum
+  product   Products @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("ProductSizes")
 }
 
 enum SizeEnum {

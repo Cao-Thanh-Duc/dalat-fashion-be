@@ -25,15 +25,12 @@ Table ProductCategory {
 Table Supplier {
   id String [pk]
   name String [not null]
-  Phone String
-  Email String
   Products Products [not null]
 }
 
 Table Products {
   id String [pk]
   name String [not null]
-  size SizeEnum
   quantity Int
   price Float
   sale_price Float [not null]
@@ -51,6 +48,14 @@ Table Products {
   image_5 String
   UserProducts UserProduct [not null]
   Orders Orders [not null]
+  size ProductSizes [not null]
+}
+
+Table ProductSizes {
+  id String [pk]
+  size SizeEnum [not null]
+  product Products [not null]
+  productId String [not null]
 }
 
 Table Roles {
@@ -151,6 +156,8 @@ Ref: Users.RoleID > Roles.RoleID
 Ref: Products.CateID > ProductCategory.id
 
 Ref: Products.SuppID > Supplier.id
+
+Ref: ProductSizes.productId > Products.id
 
 Ref: Orders.ProductID > Products.id
 
