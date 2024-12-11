@@ -86,7 +86,7 @@ export class UserController {
   }
 
   @UseGuards(HandleAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  // @Roles('ADMIN')
   @Put(':id/role')
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

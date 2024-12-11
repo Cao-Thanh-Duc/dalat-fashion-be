@@ -17,6 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Supplier } from '@prisma/client';
+import { Roles } from 'src/decorator/roles.decorator';
 import { HandleAuthGuard } from 'src/modules/auth/guard/auth.guard';
 import { CreateSupplierDto } from 'src/modules/supplier/dto/create.dto';
 import {
@@ -59,6 +60,7 @@ export class SupplierController {
 
   @UseGuards(HandleAuthGuard)
   @Post()
+  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Thêm nhà cung cấp' })
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -70,6 +72,7 @@ export class SupplierController {
 
   @UseGuards(HandleAuthGuard)
   @Put(':id')
+  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Cập nhật nhà cung cấp' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -85,6 +88,7 @@ export class SupplierController {
 
   @UseGuards(HandleAuthGuard)
   @Delete(':id')
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Xóa nhà cung cấp' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

@@ -17,6 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Products } from '@prisma/client';
+import { Roles } from 'src/decorator/roles.decorator';
 import { HandleAuthGuard } from 'src/modules/auth/guard/auth.guard';
 import { CreateProductDto } from 'src/modules/product/dto/create.dto';
 import {
@@ -60,6 +61,7 @@ export class ProductController {
 
   @UseGuards(HandleAuthGuard)
   @Post()
+  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Thêm sản phẩm' })
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -71,6 +73,7 @@ export class ProductController {
 
   @UseGuards(HandleAuthGuard)
   @Put(':id')
+  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Cập nhật sản phẩm' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -86,6 +89,7 @@ export class ProductController {
 
   @UseGuards(HandleAuthGuard)
   @Delete(':id')
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Xóa sản phẩm' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

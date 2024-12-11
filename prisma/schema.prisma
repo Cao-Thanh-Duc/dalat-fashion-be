@@ -54,6 +54,7 @@ model Supplier {
 // Sản phẩm
 model Products {
   id           String           @id @default(cuid())
+  code         String?
   name         String
   quantity     Int?
   price        Float?
