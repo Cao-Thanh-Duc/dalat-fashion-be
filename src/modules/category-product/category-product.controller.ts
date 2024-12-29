@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,8 +16,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ProductCategory } from '@prisma/client';
-import { Roles } from 'src/decorator/roles.decorator';
-import { HandleAuthGuard } from 'src/modules/auth/guard/auth.guard';
 import { CategoryProductService } from 'src/modules/category-product/category-product.service';
 import {
   CategoryProductDto,
@@ -59,9 +56,7 @@ export class CategoryProductController {
     return this.categoryProductService.getDetail(id);
   }
 
-  @UseGuards(HandleAuthGuard)
   @Post()
-  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Thêm danh mục sản phẩm' })
   @ApiResponse({ status: 201, description: 'Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -73,9 +68,7 @@ export class CategoryProductController {
     return this.categoryProductService.addCategoryProduct(data);
   }
 
-  @UseGuards(HandleAuthGuard)
   @Put(':id')
-  @Roles('ADMIN', 'EMPLOYEE')
   @ApiOperation({ summary: 'Cập nhật danh mục sản phẩm' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -89,9 +82,7 @@ export class CategoryProductController {
     return this.categoryProductService.updateCategoryProduct(id, data);
   }
 
-  @UseGuards(HandleAuthGuard)
   @Delete(':id')
-  @Roles('ADMIN')
   @ApiOperation({ summary: 'Xóa danh mục sản phẩm' })
   @ApiResponse({ status: 200, description: 'Successfully' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
